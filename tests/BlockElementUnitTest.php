@@ -5,7 +5,7 @@ use InvalidArgumentException;
 use Maknz\Slack\BlockElement;
 use Maknz\Slack\BlockElement\Button;
 
-class BlockElementtUnitTest extends TestCase
+class BlockElementUnitTest extends TestCase
 {
     public function testFactoryWithArray()
     {
