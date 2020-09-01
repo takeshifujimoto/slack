@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.12.0](https://github.com/php-slack/slack/releases/tag/1.12.0)
+ - add guzzle 7 support (by @esetnik)
+
 ## [1.10.1](https://github.com/alek13/slack/compare/1.10.1...1.11.0)
  - fix `AttachmentAction::__toArray`: no default confirmation popup if no `confirm` specified (fixes #41)
  - remove `5.5` & `hhvm` support, add `7.3` & `7.4` support; also remove builds for `nightly`
