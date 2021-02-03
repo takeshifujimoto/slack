@@ -17,12 +17,24 @@ abstract class Payload
      */
     public function __construct(array $attributes)
     {
+        $this->fillProperties($attributes);
+    }
+
+    /**
+     * @param array $attributes
+     *
+     * @return $this
+     */
+    protected function fillProperties(array $attributes): self
+    {
         foreach ($attributes as $attribute => $value) {
             $setter = self::getAttributeSetter($attribute);
             if ($setter !== null) {
                 $this->$setter($value);
             }
         }
+
+        return $this;
     }
 
     /**
@@ -32,7 +44,7 @@ abstract class Payload
      *
      * @return null|string
      */
-    protected static function getAttributeSetter(string $attribute)
+    private static function getAttributeSetter(string $attribute)
     {
         $property = self::getAttributeProperty($attribute);
 
@@ -46,7 +58,7 @@ abstract class Payload
      *
      * @return string|null
      */
-    protected static function getAttributeProperty(string $attribute)
+    private static function getAttributeProperty(string $attribute)
     {
         return static::$availableAttributes[$attribute] ?? null;
     }
@@ -58,7 +70,7 @@ abstract class Payload
      *
      * @return string
      */
-    protected static function propertyToSetter(string $property): string
+    private static function propertyToSetter(string $property): string
     {
         $property = str_replace('_', ' ', $property);
         $property = ucwords($property);

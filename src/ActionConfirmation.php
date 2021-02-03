@@ -1,7 +1,7 @@
 <?php
 namespace Maknz\Slack;
 
-class ActionConfirmation
+class ActionConfirmation extends Payload
 {
     /**
      * The required title for the pop up window.
@@ -32,28 +32,25 @@ class ActionConfirmation
     protected $dismissText;
 
     /**
+     * Internal attribute to property map.
+     *
+     * @var array
+     */
+    protected static $availableAttributes = [
+        'title'        => 'title',
+        'text'         => 'text',
+        'ok_text'      => 'ok_text',
+        'dismiss_text' => 'dismiss_text',
+    ];
+
+    /**
      * Instantiate a new ActionConfirmation.
      *
      * @param array $attributes
-     * @return void
      */
     public function __construct(array $attributes)
     {
-        if (isset($attributes['title'])) {
-            $this->setTitle($attributes['title']);
-        }
-
-        if (isset($attributes['text'])) {
-            $this->setText($attributes['text']);
-        }
-
-        if (isset($attributes['ok_text'])) {
-            $this->setOkText($attributes['ok_text']);
-        }
-
-        if (isset($attributes['dismiss_text'])) {
-            $this->setDismissText($attributes['dismiss_text']);
-        }
+        parent::__construct($attributes);
     }
 
     /**

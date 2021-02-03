@@ -1,7 +1,7 @@
 <?php
 namespace Maknz\Slack;
 
-class AttachmentField implements Field
+class AttachmentField extends Payload implements Field
 {
     /**
      * The required title field of the field.
@@ -26,24 +26,24 @@ class AttachmentField implements Field
     protected $short = false;
 
     /**
+     * Internal attribute to property map.
+     *
+     * @var array
+     */
+    protected static $availableAttributes = [
+        'title' => 'title',
+        'value' => 'value',
+        'short' => 'short',
+    ];
+
+    /**
      * Instantiate a new AttachmentField.
      *
      * @param array $attributes
-     * @return void
      */
     public function __construct(array $attributes)
     {
-        if (isset($attributes['title'])) {
-            $this->setTitle($attributes['title']);
-        }
-
-        if (isset($attributes['value'])) {
-            $this->setValue($attributes['value']);
-        }
-
-        if (isset($attributes['short'])) {
-            $this->setShort($attributes['short']);
-        }
+        parent::__construct($attributes);
     }
 
     /**

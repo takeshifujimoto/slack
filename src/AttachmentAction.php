@@ -3,7 +3,7 @@ namespace Maknz\Slack;
 
 use InvalidArgumentException;
 
-class AttachmentAction
+class AttachmentAction extends Payload
 {
     const TYPE_BUTTON = 'button';
 
@@ -61,41 +61,30 @@ class AttachmentAction
     protected $confirm;
 
     /**
+     * Internal attribute to property map.
+     *
+     * @var array
+     */
+    protected static $availableAttributes = [
+        'name'    => 'name',
+        'text'    => 'text',
+        'style'   => 'style',
+        'type'    => 'type',
+        'url'     => 'url',
+        'value'   => 'value',
+        'confirm' => 'confirm',
+    ];
+
+    /**
      * Instantiate a new AttachmentAction.
      *
      * @param array $attributes
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $attributes)
     {
-        if (isset($attributes['name'])) {
-            $this->setName($attributes['name']);
-        }
-
-        if (isset($attributes['text'])) {
-            $this->setText($attributes['text']);
-        }
-
-        if (isset($attributes['style'])) {
-            $this->setStyle($attributes['style']);
-        }
-
-        if (isset($attributes['type'])) {
-            $this->setType($attributes['type']);
-        }
-
-        if (isset($attributes['url'])) {
-            $this->setUrl($attributes['url']);
-        }
-
-        if (isset($attributes['value'])) {
-            $this->setValue($attributes['value']);
-        }
-
-        if (isset($attributes['confirm'])) {
-            $this->setConfirm($attributes['confirm']);
-        }
+        parent::__construct($attributes);
     }
 
     /**
@@ -225,7 +214,7 @@ class AttachmentAction
      *
      * @return AttachmentAction
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setConfirm($confirm)
     {
