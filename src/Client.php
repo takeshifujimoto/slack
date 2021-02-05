@@ -5,8 +5,7 @@ use GuzzleHttp\Client as Guzzle;
 use RuntimeException;
 
 /**
- * @method Message to(string $channel)
- * @method Message send(string $text = null)
+ * @mixin Message
  */
 class Client
 {
@@ -109,6 +108,11 @@ class Client
     ];
 
     /**
+     * @var Message
+     */
+    protected $message;
+
+    /**
      * Instantiate a new Client.
      *
      * @param string                  $endpoint
@@ -140,17 +144,47 @@ class Client
     }
 
     /**
+     * @param array $options
+     *
+     * @return \Maknz\Slack\Client
+     */
+    public function setOptions(array $options)
+    {
+        foreach ($options as $option => $value) {
+            $this->setOption($option, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $option
+     * @param $value
+     */
+    public function setOption($option, $value)
+    {
+        $setter = self::getOptionSetter($option);
+        if ($setter !== null) {
+            $this->$setter($value);
+        }
+    }
+
+    /**
      * Pass any unhandled methods through to a new Message
      * instance.
      *
      * @param string $name      The name of the method
      * @param array  $arguments The method arguments
      *
-     * @return \Maknz\Slack\Message
+     * @return $this|mixed
      */
     public function __call($name, $arguments)
     {
-        return call_user_func_array([$this->createMessage(), $name], $arguments);
+        /** @var Message $message */
+        $message = $this->getOrCreateMessage();
+        $value = $message->$name(...$arguments);
+
+        return strpos($name, 'get') === 0 ? $value : $this;
     }
 
     /**
@@ -382,6 +416,14 @@ class Client
     }
 
     /**
+     * @return Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
      * Create a new message with defaults.
      *
      * @return \Maknz\Slack\Message
@@ -404,7 +446,17 @@ class Client
     }
 
     /**
+     * @return Message
+     */
+    protected function getOrCreateMessage()
+    {
+        return $this->message ?? $this->message = $this->createMessage();
+    }
+
+    /**
      * Send a message.
+     *
+     * @internal will become protected
      *
      * @param \Maknz\Slack\Message $message
      *
@@ -421,6 +473,33 @@ class Client
         }
 
         $this->guzzle->post($this->endpoint, ['body' => $encoded]);
+    }
+
+    /**
+     * Send the message.
+     *
+     * @param string|\Maknz\Slack\Message $text The text to send
+     *
+     * @return \Maknz\Slack\Message
+     *
+     * @throws \RuntimeException
+     */
+    public function send($text = null)
+    {
+        if ($text instanceof Message) {
+            $message = $text;
+        } else {
+            $message = $this->getOrCreateMessage();
+            if ($text !== null) {
+                $message->setText($text);
+            }
+        }
+
+        $this->sendMessage($message);
+
+        $this->message = null;
+
+        return $message;
     }
 
     /**
@@ -472,31 +551,5 @@ class Client
         }
 
         return $attachments;
-    }
-
-    /**
-     * @param array $options
-     *
-     * @return \Maknz\Slack\Client
-     */
-    public function setOptions(array $options)
-    {
-        foreach ($options as $option => $value) {
-            $this->setOption($option, $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $option
-     * @param $value
-     */
-    public function setOption($option, $value)
-    {
-        $setter = self::getOptionSetter($option);
-        if ($setter !== null) {
-            $this->$setter($value);
-        }
     }
 }

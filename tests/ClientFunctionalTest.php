@@ -19,22 +19,23 @@ class ClientFunctionalTest extends TestCase
     public function testPlainMessage()
     {
         $expectedHttpData = [
-            'username' => 'Archer',
-            'channel' => '@regan',
-            'text' => 'Message',
+            'username'      => 'Archer',
+            'channel'       => '@regan',
+            'text'          => 'Message',
             'response_type' => 'ephemeral',
-            'link_names' => 0,
-            'unfurl_links' => false,
-            'unfurl_media' => true,
-            'mrkdwn' => true,
-            'attachments' => [],
+            'link_names'    => 0,
+            'unfurl_links'  => false,
+            'unfurl_media'  => true,
+            'mrkdwn'        => true,
+            'attachments'   => [],
         ];
 
-        $client = new Client('http://fake.endpoint');
+        $client = (new Client('http://fake.endpoint'))
+            ->to('@regan')
+            ->from('Archer')
+            ->setText('Message');
 
-        $message = $client->to('@regan')->from('Archer')->setText('Message');
-
-        $payload = $client->preparePayload($message);
+        $payload = $client->preparePayload($client->getMessage());
 
         $this->assertEquals($expectedHttpData, $payload);
     }

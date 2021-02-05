@@ -6,14 +6,6 @@ use InvalidArgumentException;
 class Message
 {
     /**
-     * Reference to the Slack client responsible for sending
-     * the message.
-     *
-     * @var \Maknz\Slack\Client
-     */
-    protected $client;
-
-    /**
      * The text to send with the message.
      *
      * @var string
@@ -87,18 +79,6 @@ class Message
      * @var string
      */
     const ICON_TYPE_EMOJI = 'icon_emoji';
-
-    /**
-     * Instantiate a new Message.
-     *
-     * @param \Maknz\Slack\Client $client
-     *
-     * @return void
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
 
     /**
      * Get the message text.
@@ -487,28 +467,6 @@ class Message
     public function clearBlocks()
     {
         $this->blocks = [];
-
-        return $this;
-    }
-
-    /**
-     * Send the message.
-     *
-     * @deprecated
-     *
-     * @param string $text The text to send
-     *
-     * @return \Maknz\Slack\Message
-     *
-     * @throws \RuntimeException
-     */
-    public function send($text = null)
-    {
-        if ($text !== null) {
-            $this->setText($text);
-        }
-
-        $this->client->sendMessage($this);
 
         return $this;
     }

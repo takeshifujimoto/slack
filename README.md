@@ -10,7 +10,7 @@ A simple PHP package for sending messages to [Slack](https://slack.com)
 with [incoming webhooks](https://my.slack.com/services/new/incoming-webhook),
 focused on ease-of-use and elegant syntax.
 
-**supports:** PHP `7.0`, `7.1`, `7.2`  
+**supports:** PHP `7.1`, `7.2`, `7.3`, `7.4` or `8.0`  
 **require:** `guzzlehttp/guzzle` any of versions `~6.0|~5.0|~4.0`
 
 > This is the fork of popular, great, but abandoned package [`maknz/slack`](https://github.com/maknz/slack)
@@ -60,10 +60,10 @@ $client = new Maknz\Slack\Client('https://hooks.slack.com/...');
 // use response_type (in_channel | ephemeral) to denote whether the message will be visible
 // to others in the channel.
 $settings = [
-	'username' => 'Cyril',
-	'channel' => '#accounting',
-	'reponse_type' => 'in_channel',
-	'link_names' => true
+    'username'     => 'Cyril',
+    'channel'      => '#accounting',
+    'reponse_type' => 'in_channel',
+    'link_names'   => true
 ];
 
 $client = new Maknz\Slack\Client('https://hooks.slack.com/...', $settings);
@@ -121,9 +121,9 @@ $client->to('#accounting')->withIcon('http://example.com/accounting.png')->send(
 
 ```php
 $client->to('#operations')->attach([
-	'fallback' => 'Server health: good',
-	'text' => 'Server health: good',
-	'color' => 'danger',
+    'fallback' => 'Server health: good',
+    'text' => 'Server health: good',
+    'color' => 'danger',
 ])->send('New alert from the monitoring system'); // no message, but can be provided if you'd like
 ```
 
@@ -131,21 +131,21 @@ $client->to('#operations')->attach([
 
 ```php
 $client->to('#operations')->attach([
-	'fallback' => 'Current server stats',
-	'text' => 'Current server stats',
-	'color' => 'danger',
-	'fields' => [
-		[
-			'title' => 'CPU usage',
-			'value' => '90%',
-			'short' => true // whether the field is short enough to sit side-by-side other fields, defaults to false
-		],
-		[
-			'title' => 'RAM usage',
-			'value' => '2.5GB of 4GB',
-			'short' => true
-		]
-	]
+    'fallback' => 'Current server stats',
+    'text' => 'Current server stats',
+    'color' => 'danger',
+    'fields' => [
+        [
+            'title' => 'CPU usage',
+            'value' => '90%',
+            'short' => true // whether the field is short enough to sit side-by-side other fields, defaults to false
+        ],
+        [
+            'title' => 'RAM usage',
+            'value' => '2.5GB of 4GB',
+            'short' => true
+        ]
+    ]
 ])->send('New alert from the monitoring system'); // no message, but can be provided if you'd like
 ```
 
@@ -153,34 +153,37 @@ $client->to('#operations')->attach([
 
 ```php
 $client->to('@regan')->attach([
-	'fallback' => 'Keep up the great work! I really love how the app works.',
-	'text' => 'Keep up the great work! I really love how the app works.',
-	'author_name' => 'Jane Appleseed',
-	'author_link' => 'https://yourapp.com/feedback/5874601',
-	'author_icon' => 'https://static.pexels.com/photos/61120/pexels-photo-61120-large.jpeg'
+    'fallback'    => 'Keep up the great work! I really love how the app works.',
+    'text'        => 'Keep up the great work! I really love how the app works.',
+    'author_name' => 'Jane Appleseed',
+    'author_link' => 'https://yourapp.com/feedback/5874601',
+    'author_icon' => 'https://static.pexels.com/photos/61120/pexels-photo-61120-large.jpeg'
 ])->send('New user feedback');
 ```
 
 #### Using blocks ([Block Kit](https://api.slack.com/block-kit))
 
 ```php
-$client->to('@regan')->withBlock([
-    'type' => 'section',
-    'text' => 'Do you love the app?'
-])->withBlock([
-    'type' => 'actions',
-    'elements' => [[
-        'type'      => 'button',
-        'text'      => 'Love it',
-        'style'     => 'primary',
-        'action_id' => 'love',
-    ], [
-        'type'      => 'button',
-        'text'      => 'Hate it',
-        'style'     => 'danger',
-        'action_id' => 'hate',
-    ],
-])->send('Notification fallback message');
+$client->to('@regan')
+    ->withBlock([
+        'type' => 'section',
+        'text' => 'Do you love the app?'
+    ])
+    ->withBlock([
+        'type' => 'actions',
+        'elements' => [[
+            'type'      => 'button',
+            'text'      => 'Love it',
+            'style'     => 'primary',
+            'action_id' => 'love',
+        ], [
+            'type'      => 'button',
+            'text'      => 'Hate it',
+            'style'     => 'danger',
+            'action_id' => 'hate',
+        ],]
+    ])
+    ->send('Notification fallback message');
 ```
 
 ## Advanced usage
@@ -201,11 +204,11 @@ $client->to('#general')->enableMarkdown()->send('Enable _markdown_ just for this
 
 ```php
 $client->to('#operations')->attach([
-	'fallback' => 'It is all broken, man',
-	'text' => 'It is _all_ broken, man',
-	'pretext' => 'From user: *JimBob*',
-	'color' => 'danger',
-	'mrkdwn_in' => ['pretext', 'text']
+    'fallback'  => 'It is all broken, man',
+    'text'      => 'It is _all_ broken, man',
+    'pretext'   => 'From user: *JimBob*',
+    'color'     => 'danger',
+    'mrkdwn_in' => ['pretext', 'text']
 ])->send('New alert from the monitoring system');
 ```
 
@@ -219,10 +222,12 @@ $client->to('@regan')->send('I am sending this implicitly');
 
 // Explicitly
 $message = $client->createMessage();
+$message
+    ->to('@regan')
+    ->setText('I am sending this explicitly')
+;
 
-$message->to('@regan')->setText('I am sending this explicitly');
-
-$message->send();
+$client->send($message);
 ```
 
 ### Attachments
@@ -231,8 +236,8 @@ When using attachments, the easiest way is to provide an array of data as shown 
 
 ```php
 $attachment = new Attachment([
-	'fallback' => 'Some fallback text',
-	'text' => 'The attachment text'
+    'fallback' => 'Some fallback text',
+    'text'     => 'The attachment text'
 ]);
 
 // Explicitly create a message from the client
@@ -240,25 +245,26 @@ $attachment = new Attachment([
 $message = $client->createMessage();
 
 $message->attach($attachment);
-
 // Explicitly set the message text rather than
 // implicitly through the send method
-$message->setText('Hello world')->send();
+$message->setText('Hello world');
+
+$client->send($message);
 ```
 
 Each attachment field is also an object, an AttachmentField. They can be used as well instead of their data in array form:
 
 ```php
 $attachment = new Attachment([
-	'fallback' => 'Some fallback text',
-	'text' => 'The attachment text',
-	'fields' => [
-		new AttachmentField([
-			'title' => 'A title',
-			'value' => 'A value',
-			'short' => true
-		])
-	]
+    'fallback' => 'Some fallback text',
+    'text' => 'The attachment text',
+    'fields' => [
+        new AttachmentField([
+            'title' => 'A title',
+            'value' => 'A value',
+            'short' => true
+        ])
+    ]
 ]);
 ```
 

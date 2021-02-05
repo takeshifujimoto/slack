@@ -95,12 +95,10 @@ class ClientUnitTest extends TestCase
      */
     public function testWildcardCallToMessage()
     {
-        $client = new Client('http://fake.endpoint');
+        $client = (new Client('http://fake.endpoint'))->to('@regan');
 
-        $message = $client->to('@regan');
+        $this->assertInstanceOf(Client::class, $client);
 
-        $this->assertInstanceOf('Maknz\Slack\Message', $message);
-
-        $this->assertSame('@regan', $message->getChannel());
+        $this->assertSame('@regan', $client->getChannel());
     }
 }
