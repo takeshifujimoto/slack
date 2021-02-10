@@ -1,9 +1,48 @@
 # Change Log
 
+## [2.0.0](https://github.com/php-slack/slack/releases/tag/2.0.0)
+ - ignore phpunit.xml & rename to phpunit.xml.dist fix #16
+ - exclude 'tests' & 'vendor' from calc code coverage. closes #18
+ - code style rules; add .editorconfig
+ - migrate to phpunit 6.5. closes #7. & Update PhpUnit to 7.5. Closes #27
+ - migrate to mockery 1.0. closes #19
+ - drop support for php 5, 7.0 & hhvm (fixes builds)
+ - php docblocks for tests. closes #8
+ - decrease Attachment::__contruct() complexity. closes #9
+ - rename attributes to options
+ - decrease Client::__construct() complexity. closes #12
+ - Added response_type to allow for 'in_channel' vs 'emphemeral' messages in channel
+ - Blocks support (Integrate Blocks with main `Message/Client`) by @cmbuckley:
+    - Button element and Confirmation object
+    - Checkboxes element and Option object
+    - DatePicker element
+    - Image element
+    - Overflow element
+    - TextInput element
+    - RadioButtons element
+    - Select element and OptionGroup object
+    - MultiSelect element
+    - Actions block
+    - Context block
+    - Divider block
+    - File block
+    - Image block
+    - Input block
+ - Fix php doc-blocks. Closes #39.
+ - correct initial option check (fixes #40)
+ - add travis notification to Slack. Closes #17.
+ - fix class name. fix #45
+ - Improve test coverage for Block kit
+ - Added callback_id to Attachment.php (#50) to allow for working with the interactivity callback api in slack
+ - bugfix: prevent call on non-object
+ - Update Composer and PHPUnit to PHP 8.0 (#56)
+ - reuse `Payload` for `fillProperties()` (decrease complexity). resolves #13
+ - decouple `Message` from `Client`. Closes #15, fixes maknz/slack#70
+
 ## [1.12.0](https://github.com/php-slack/slack/releases/tag/1.12.0)
  - add guzzle 7 support (by @esetnik)
 
-## [1.10.1](https://github.com/alek13/slack/compare/1.10.1...1.11.0)
+## [1.11.0](https://github.com/alek13/slack/compare/1.10.1...1.11.0)
  - fix `AttachmentAction::__toArray`: no default confirmation popup if no `confirm` specified (fixes #41)
  - remove `5.5` & `hhvm` support, add `7.3` & `7.4` support; also remove builds for `nightly`
  - change travis & scrutinizer badge urls in readme
