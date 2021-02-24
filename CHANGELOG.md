@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.0.1](https://github.com/php-slack/slack/releases/tag/2.0.1)
+ - Add tests for all BlockElement factory types
+ - Fix BlockElement factory spec for Checkboxes (Fixes #60)
+
 ## [2.0.0](https://github.com/php-slack/slack/releases/tag/2.0.0)
  - ignore phpunit.xml & rename to phpunit.xml.dist fix #16
  - exclude 'tests' & 'vendor' from calc code coverage. closes #18
